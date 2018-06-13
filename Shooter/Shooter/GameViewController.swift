@@ -188,6 +188,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func onQuitButtonClick(_ sender: Any) {
         //TODO: navigate to next view
+        UserDefaults.standard.set(true, forKey: "LoadFromLocalFile")
         saveIntoLocalFile();
     }
     func runTimer() {
@@ -281,6 +282,15 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
+    
 }
 
 extension float4x4 {
