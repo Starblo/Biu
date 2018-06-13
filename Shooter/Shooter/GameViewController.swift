@@ -25,16 +25,6 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     var gameInfo = GameInfo();
     var loadFromLocalFile = true;
     
-//    var timeRemain = 60;
-//    var initMonsterCount = 10;
-//    var hitCount = 0;
-//    var monsters = [Monster]();
-//    var bgMusicOn = false;
-//    var soundEffectOn = false;
-//    var timeLimiting = true;
-//    var animating = true;
-//    var paused = false;
-    
     @IBOutlet weak var pauseView: UIView!
     @IBOutlet weak var timerButton: UIButton!
 
@@ -53,6 +43,8 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         
         pauseView.isHidden = true;
         musicController.isHidden = true;
+        
+        loadFromLocalFile = UserDefaults.standard.bool(forKey: "loadFromLocalFile");
         
         //NOTE: loadFromLocalFile =》 archive
         
@@ -97,7 +89,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func initMonster() {
-        for _ in 1...(gameInfo.initMonsterCount - gameInfo.hitCount) {
+        for i in 1...gameInfo.initMonsterCount {
             gameInfo.monsters.append(Monster());
         }
     }
@@ -188,7 +180,12 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func onQuitButtonClick(_ sender: Any) {
         //TODO: navigate to next view
+<<<<<<< HEAD
         UserDefaults.standard.set(true, forKey: "LoadFromLocalFile")
+=======
+        //NOTE: forKey
+        UserDefaults.standard.set(true, forKey: "LOCAL_KEY");
+>>>>>>> e5be8b694fc1f20511832584806ede8d01d9902b
         saveIntoLocalFile();
     }
     func runTimer() {
@@ -197,7 +194,15 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     
     @objc func updateTime() {
         if(gameInfo.timeRemain == 0 && gameInfo.timeLimiting) {
-            //TODO: quit game;
+            if(mode == Mode.mode1) {
+                //infinity mode
+                //NOTE: forKey
+                UserDefaults.standard.set(gameInfo.hitCount, forKey: "MODE_1_NEW_SCORE");
+            } else {
+                //NOTE: forKey
+                UserDefaults.standard.set(gameInfo.hitCount, forKey: "MODE_2_NEW_SCORE");
+            }
+            //TODO: navigate
             return;
         }
         gameInfo.timeRemain = gameInfo.timeRemain - 1;
@@ -217,7 +222,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         }
         
         node.removeFromParentNode();
-        for i in 0...gameInfo.monsters.count {
+        for i in 0...(gameInfo.monsters.count-1) {
             if(gameInfo.monsters[i].id == node.name) {
                 gameInfo.monsters[i].dead = true;
             }
@@ -226,13 +231,14 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         incrementHitCount();
         playSoundEffect();
         
-        if(!gameInfo.timeLimiting) {
+        if(mode == Mode.mode1) {
             //case infinity mode
             randomAddNode();
         }
         
+        //for mode2
         if(gameInfo.timeLimiting && gameInfo.hitCount == gameInfo.initMonsterCount) {
-            //TODO: done
+            //TODO: navigate
         }
     }
     
