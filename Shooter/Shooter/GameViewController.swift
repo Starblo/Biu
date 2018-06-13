@@ -16,11 +16,8 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     var mode : Mode = Mode.mode1
-    
-    //TODO: var mode
     var isTimerRunning =  false;
     var timer = Timer();
-    
     var paused = false;
     var gameInfo = GameInfo();
     var loadFromLocalFile = true;
@@ -31,18 +28,20 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var continueButton: UIButton!
     
     @IBOutlet weak var quitButton: UIButton!
-    @IBOutlet weak var optionButton: UIButton!
     
     @IBOutlet weak var musicButton: UIButton!
     
-    @IBOutlet weak var scoreButton: UIButton!
+    @IBOutlet weak var monsterRemainCountButton: UIButton!
     @IBOutlet weak var musicController: UIView!
+    @IBOutlet weak var nextLevelView: UIView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad();
         
         pauseView.isHidden = true;
         musicController.isHidden = true;
+        nextLevelView.isHidden = true;
         
         loadFromLocalFile = UserDefaults.standard.bool(forKey: "loadFromLocalFile");
         
@@ -56,10 +55,17 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         if(loadFromLocalFile) {
             loadFromFile();
         } else {
+            if(mode == Mode.mode2) {
+                initLevel(level: 0);
+            } else {
+                gameInfo.totalMonsterCount = 10;
+                gameInfo.timeRemain = 60;
+            }
             initMonster();
         }
-        
         loadModel(animated: gameInfo.animating);
+        
+        monsterRemainCountButton.setTitle(String(gameInfo.totalMonsterCount - gameInfo.hitCount), for: UIControlState.normal);
         
         addTapGestureToSceneView();
         if gameInfo.timeLimiting {
@@ -69,12 +75,26 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    func initLevel(level: Int) {
+        gameInfo.animating = GameLevel.levels[level].animating;
+        gameInfo.timeRemain = GameLevel.levels[level].timeLimit;
+        gameInfo.totalMonsterCount += GameLevel.levels[level].monsterNum;
+        print("GAMEINFO:", gameInfo.totalMonsterCount);
+        
+    }
+    
     func loadFromFile() {
         if let info = NSKeyedUnarchiver.unarchiveObject(withFile: GameInfo.ArchiveURL.path) as? GameInfo {
             gameInfo = info;
-            scoreButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
+            monsterRemainCountButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
             timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
         } else {
+            if(mode == Mode.mode2) {
+                initLevel(level: 0);
+            } else {
+                gameInfo.totalMonsterCount = 10;
+                gameInfo.timeRemain = 60;
+            }
             initMonster();
         }
     }
@@ -89,11 +109,24 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func initMonster() {
-        for i in 1...gameInfo.initMonsterCount {
+        for _ in 1...gameInfo.totalMonsterCount {
             gameInfo.monsters.append(Monster());
         }
     }
     
+    @IBAction func onNextLevelButtonClick(_ sender: Any) {
+        nextLevelView.isHidden = true;
+        gameInfo.currentLevel = gameInfo.currentLevel + 1;
+        initLevel(level: gameInfo.currentLevel - 1);
+        randomAddNode(gameInfo.totalMonsterCount - gameInfo.monsters.count);
+        
+        monsterRemainCountButton.setTitle(String(gameInfo.totalMonsterCount - gameInfo.hitCount), for: UIControlState.normal);
+        timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
+        
+        
+        
+        runTimer();
+    }
     
     @IBAction func toggleMusicController(_ sender: Any) {
         musicController.isHidden = !musicController.isHidden;
@@ -152,7 +185,6 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
             animation.autoreverses = true;
             animation.repeatCount = .infinity
             
-            
             boxNode.addAnimation(animation, forKey: nil);
             boxNode.addAnimation(rotationAnimation, forKey:nil);
         }
@@ -204,6 +236,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
     }
     
+    
+    
+    
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
         
         musicController.isHidden = true;
@@ -229,19 +264,27 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         if(mode == Mode.mode1) {
             //case infinity mode
             randomAddNode();
+            gameInfo.totalMonsterCount += 1;
         }
         
         //for mode2
-        if(gameInfo.timeLimiting && gameInfo.hitCount == gameInfo.initMonsterCount) {
-            //TODO: navigate
+        if(gameInfo.timeLimiting && gameInfo.hitCount == gameInfo.totalMonsterCount) {
+            if(gameInfo.currentLevel == gameInfo.maxLevel) {
+                //TODO:
+            } else {
+                nextLevelView.isHidden = false;
+            }
         }
     }
     
-    func randomAddNode() {
-        let m = Monster();
-        m.id = String(gameInfo.monsters.count);
-        addModel(m, gameInfo.animating);
-        gameInfo.initMonsterCount = gameInfo.initMonsterCount + 1;
+    func randomAddNode(_ num: Int = 1) {
+        
+        for _ in 1...num {
+            let m = Monster();
+            gameInfo.monsters.append(m);
+            addModel(m, gameInfo.animating);
+        }
+        
     }
     
     func playSoundEffect() {
@@ -254,7 +297,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     
     func incrementHitCount() {
         gameInfo.hitCount = gameInfo.hitCount + 1;
-        scoreButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
+        monsterRemainCountButton.setTitle(String(gameInfo.totalMonsterCount - gameInfo.hitCount), for: UIControlState.normal);
     }
     
     

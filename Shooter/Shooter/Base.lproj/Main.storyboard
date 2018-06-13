@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="leS-mk-pVE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="leS-mk-pVE">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -298,6 +298,26 @@
                                     <action selector="onTimerClick:" destination="BV1-FR-VrT" eventType="touchUpInside" id="pNz-RJ-2fm"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="due-33-Hv0">
+                                <rect key="frame" x="67" y="269" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNv-a5-x0u">
+                                        <rect key="frame" x="97" y="49" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="onNextLevelButtonClick:" destination="BV1-FR-VrT" eventType="touchUpInside" id="qC7-y1-D1n"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5YA-mc-46p">
+                                        <rect key="frame" x="22" y="49" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Quit"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -310,12 +330,13 @@
                     </view>
                     <connections>
                         <outlet property="continueButton" destination="RTo-lr-UcL" id="E3M-Fy-cBG"/>
+                        <outlet property="monsterRemainCountButton" destination="jTT-yq-q8d" id="djM-Co-Wwe"/>
                         <outlet property="musicButton" destination="iTU-PT-jKI" id="uM6-rd-fD6"/>
                         <outlet property="musicController" destination="N7O-IX-94M" id="CpB-8n-nDA"/>
+                        <outlet property="nextLevelView" destination="due-33-Hv0" id="Bmy-kV-2XQ"/>
                         <outlet property="pauseView" destination="Eo9-2o-TO1" id="9TL-xy-0kt"/>
                         <outlet property="quitButton" destination="43v-iU-q2F" id="Ox1-jA-4CZ"/>
                         <outlet property="sceneView" destination="XHe-Ns-7hg" id="E3J-oC-11N"/>
-                        <outlet property="scoreButton" destination="jTT-yq-q8d" id="djM-Co-Wwe"/>
                         <outlet property="timerButton" destination="QJ3-9W-eUt" id="Ggy-Lc-4sE"/>
                     </connections>
                 </viewController>

@@ -86,6 +86,8 @@ struct GameInfoProperty {
     static var timeLimiting = "timeLimiting"
     static var animating = "animating"
     static var infinityMode = "infinityMode"
+    static var currentLevel = "currentLevel"
+    static var maxLevel = "maxLevel"
 }
 
 class GameInfo : NSObject, NSCoding {
@@ -94,7 +96,7 @@ class GameInfo : NSObject, NSCoding {
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("gameinfo")
     
     var timeRemain = 60;
-    var initMonsterCount = 10;
+    var totalMonsterCount = 10;
     var hitCount = 0;
     var monsters = [Monster]();
     var bgMusicOn = false;
@@ -102,10 +104,12 @@ class GameInfo : NSObject, NSCoding {
     var timeLimiting = true;
     var animating = true;
     var infinityMode = false;
+    var currentLevel = 1;
+    var maxLevel = 2;
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(timeRemain, forKey: GameInfoProperty.timeRemain);
-        aCoder.encode(initMonsterCount, forKey: GameInfoProperty.initMonsterCount);
+        aCoder.encode(totalMonsterCount, forKey: GameInfoProperty.initMonsterCount);
         aCoder.encode(hitCount, forKey: GameInfoProperty.hitCount);
         aCoder.encode(monsters, forKey: GameInfoProperty.monsters);
         aCoder.encode(bgMusicOn, forKey: GameInfoProperty.bgMusicOn);
@@ -113,6 +117,8 @@ class GameInfo : NSObject, NSCoding {
         aCoder.encode(timeLimiting, forKey: GameInfoProperty.timeLimiting);
         aCoder.encode(animating, forKey: GameInfoProperty.animating);
         aCoder.encode(infinityMode, forKey: GameInfoProperty.infinityMode);
+        aCoder.encode(currentLevel, forKey: GameInfoProperty.currentLevel);
+        aCoder.encode(maxLevel, forKey: GameInfoProperty.maxLevel);
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -128,22 +134,26 @@ class GameInfo : NSObject, NSCoding {
         let timeLimiting = aDecoder.decodeBool(forKey: GameInfoProperty.timeLimiting);
         let animating = aDecoder.decodeBool(forKey: GameInfoProperty.animating);
         let inf = aDecoder.decodeBool(forKey: GameInfoProperty.infinityMode);
+        let cl = aDecoder.decodeInteger(forKey: GameInfoProperty.currentLevel);
+        let ml = aDecoder.decodeInteger(forKey: GameInfoProperty.maxLevel);
         
-        self.init(timeRemain: timeRemain, initMonsterCount: initMCnt, hitCount: hitCnt, monsters: monsters, bgMusicOn: bgMusicOn, soundEffectOn: soundEffectOn, timeLimiting: timeLimiting, animating: animating, infinityMode: inf);
+        self.init(timeRemain: timeRemain, initMonsterCount: initMCnt, hitCount: hitCnt, monsters: monsters, bgMusicOn: bgMusicOn, soundEffectOn: soundEffectOn, timeLimiting: timeLimiting, animating: animating, infinityMode: inf, currentLevel: cl, maxLevel: ml);
     }
     
-    init(timeRemain: Int = 60,
-         initMonsterCount: Int = 10,
+    init(timeRemain: Int = 0,
+         initMonsterCount: Int = 0,
          hitCount: Int = 0,
          monsters: [Monster] = [Monster](),
          bgMusicOn: Bool = false,
          soundEffectOn: Bool = false,
          timeLimiting: Bool = true,
          animating: Bool = true,
-         infinityMode: Bool = false) {
+         infinityMode: Bool = false,
+         currentLevel: Int = 1,
+         maxLevel: Int = 2) {
         
         self.timeRemain = timeRemain;
-        self.initMonsterCount = initMonsterCount;
+        self.totalMonsterCount = initMonsterCount;
         self.hitCount = hitCount;
         self.monsters = monsters;
         self.bgMusicOn = bgMusicOn;
@@ -153,4 +163,28 @@ class GameInfo : NSObject, NSCoding {
         self.infinityMode = infinityMode;
     }
     
+}
+
+
+struct GameLevel {
+    static var levels: [LevelInfo] {
+        var ls = [LevelInfo]();
+        ls.append(LevelInfo(timeLimit: 30, animating: false, monsterNum: 10));
+        ls.append(LevelInfo(timeLimit: 30, animating: true, monsterNum: 10));
+        
+        return ls;
+    }
+    
+}
+
+class LevelInfo {
+    var timeLimit: Int;
+    var animating: Bool;
+    var monsterNum: Int;
+    
+    init(timeLimit: Int, animating: Bool, monsterNum: Int) {
+        self.timeLimit = timeLimit;
+        self.animating = animating;
+        self.monsterNum = monsterNum;
+    }
 }
