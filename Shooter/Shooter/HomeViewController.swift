@@ -13,7 +13,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var mode1Button: UIButton!
     @IBOutlet weak var mode2Button: UIButton!
     
-    var saved : Bool = false
     var sendMode: Mode = Mode.mode1
     
     override func viewDidLoad() {
@@ -42,12 +41,10 @@ class HomeViewController: UIViewController {
         if segue.identifier == "mode1" {
             guard let modeViewController = segue.destination as? ModeViewController else {return}
             modeViewController.mode = Mode.mode1
-            modeViewController.saved = self.saved
         }
         else if segue.identifier == "mode2" {
             guard let modeViewController = segue.destination as? ModeViewController else {return}
             modeViewController.mode = Mode.mode2
-            modeViewController.saved = self.saved
         }
         else{
             return
