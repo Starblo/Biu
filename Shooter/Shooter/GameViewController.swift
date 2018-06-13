@@ -2,53 +2,29 @@
 //  GameViewController.swift
 //  Shooter
 //
-<<<<<<< HEAD
 //  Created by Starblo Hong on 11/06/2018.
 //  Copyright © 2018 Starblo Hong. All rights reserved.
 //
 
-=======
-//  Created by kotta on 12/06/2018.
-//  Copyright © 2018 Starblo Hong. All rights reserved.
-//
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
 import Foundation
 import CoreFoundation
 import os
 import UIKit
 import ARKit
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 class GameViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     var mode : Mode = Mode.mode1
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     
     //TODO: var mode
     var isTimerRunning =  false;
     var timer = Timer();
     
-=======
-class GameViewController: UIViewController {
-
-    //TODO: var mode
-    var isTimerRunning =  false;
-    var timer = Timer();
-
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
     var paused = false;
     var gameInfo = GameInfo();
     var loadFromLocalFile = true;
     
-<<<<<<< HEAD
 //    var timeRemain = 60;
 //    var initMonsterCount = 10;
 //    var hitCount = 0;
@@ -64,13 +40,6 @@ class GameViewController: UIViewController {
 
     @IBOutlet weak var continueButton: UIButton!
     
-=======
-    @IBOutlet weak var pauseView: UIView!
-    @IBOutlet weak var timerButton: UIButton!
-    @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var continueButton: UIButton!
-
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
     @IBOutlet weak var quitButton: UIButton!
     @IBOutlet weak var optionButton: UIButton!
     
@@ -79,10 +48,6 @@ class GameViewController: UIViewController {
     @IBOutlet weak var scoreButton: UIButton!
     @IBOutlet weak var musicController: UIView!
     
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     override func viewDidLoad() {
         super.viewDidLoad();
         
@@ -95,10 +60,7 @@ class GameViewController: UIViewController {
         //case time limiting mode, gameInfo.timeLimiting -> true
         //default number of monster is 10
         //default time limit is 60s
-<<<<<<< HEAD
         
-=======
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
         if(loadFromLocalFile) {
             loadFromFile();
         } else {
@@ -114,11 +76,7 @@ class GameViewController: UIViewController {
             timerButton.isHidden = true;
         }
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
     func loadFromFile() {
         if let info = NSKeyedUnarchiver.unarchiveObject(withFile: GameInfo.ArchiveURL.path) as? GameInfo {
             gameInfo = info;
@@ -173,10 +131,6 @@ class GameViewController: UIViewController {
     }
     
     func loadModel(animated: Bool = true) {
-<<<<<<< HEAD
-=======
-        
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
         for m in gameInfo.monsters {
             if m.dead {
                 continue;
@@ -221,11 +175,7 @@ class GameViewController: UIViewController {
         sceneView.session.run(config);
         
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         sceneView.session.pause();
@@ -253,10 +203,6 @@ class GameViewController: UIViewController {
         timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
     }
     
-<<<<<<< HEAD
-=======
-    
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
         
         musicController.isHidden = true;
@@ -275,11 +221,7 @@ class GameViewController: UIViewController {
                 gameInfo.monsters[i].dead = true;
             }
         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
         incrementHitCount();
         playSoundEffect();
         
@@ -312,7 +254,6 @@ class GameViewController: UIViewController {
         gameInfo.hitCount = gameInfo.hitCount + 1;
         scoreButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
     }
-<<<<<<< HEAD
     
     
     // MARK: - ARSCNViewDelegate
@@ -340,8 +281,6 @@ class GameViewController: UIViewController {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
-=======
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
 }
 
 extension float4x4 {

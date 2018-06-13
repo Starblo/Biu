@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E5801FD20CF742200FD730B /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5801FB20CF742200FD730B /* GameViewController.swift */; };
-		0E5801FE20CF742200FD730B /* GameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E5801FC20CF742200FD730B /* GameViewController.xib */; };
-		0E58020020CFAEFB00FD730B /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5801FF20CFAEFB00FD730B /* Monster.swift */; };
-		0E58020220CFAF5800FD730B /* common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E58020120CFAF5800FD730B /* common.swift */; };
 		F2D4D69D20CEB08F006C77AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D4D69C20CEB08F006C77AB /* AppDelegate.swift */; };
 		F2D4D69F20CEB08F006C77AB /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = F2D4D69E20CEB08F006C77AB /* art.scnassets */; };
 		F2D4D6A120CEB08F006C77AB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D4D6A020CEB08F006C77AB /* GameViewController.swift */; };
@@ -24,14 +20,8 @@
 		F2EF7D6720CFAF8D00BD9B86 /* HelpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F2EF7D6620CFAF8D00BD9B86 /* HelpView.xib */; };
 		F2EF7D6920CFC40D00BD9B86 /* ModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EF7D6820CFC40D00BD9B86 /* ModeViewController.swift */; };
 		F2EF7D6B20CFCFDF00BD9B86 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EF7D6A20CFCFDF00BD9B86 /* Mode.swift */; };
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 		F2EF7D6D20CFE1E700BD9B86 /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EF7D6C20CFE1E700BD9B86 /* Monster.swift */; };
 		F2EF7D6F20CFE1FC00BD9B86 /* common.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EF7D6E20CFE1FC00BD9B86 /* common.swift */; };
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,10 +42,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E5801FB20CF742200FD730B /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		0E5801FC20CF742200FD730B /* GameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameViewController.xib; sourceTree = "<group>"; };
-		0E5801FF20CFAEFB00FD730B /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
-		0E58020120CFAF5800FD730B /* common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = common.swift; sourceTree = "<group>"; };
 		F2D4D69920CEB08F006C77AB /* Shooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D4D69C20CEB08F006C77AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2D4D69E20CEB08F006C77AB /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -75,14 +61,8 @@
 		F2EF7D6620CFAF8D00BD9B86 /* HelpView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpView.xib; sourceTree = "<group>"; };
 		F2EF7D6820CFC40D00BD9B86 /* ModeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeViewController.swift; sourceTree = "<group>"; };
 		F2EF7D6A20CFCFDF00BD9B86 /* Mode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 		F2EF7D6C20CFE1E700BD9B86 /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 		F2EF7D6E20CFE1FC00BD9B86 /* common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = common.swift; sourceTree = "<group>"; };
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,31 +119,14 @@
 				F2D4D6A020CEB08F006C77AB /* GameViewController.swift */,
 				F2EF7D6420CFAF7F00BD9B86 /* HelpView.swift */,
 				F2EF7D6620CFAF8D00BD9B86 /* HelpView.xib */,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 				F2EF7D6C20CFE1E700BD9B86 /* Monster.swift */,
 				F2EF7D6E20CFE1FC00BD9B86 /* common.swift */,
 				F2D4D6A520CEB090006C77AB /* Assets.xcassets */,
 				F2D4D69C20CEB08F006C77AB /* AppDelegate.swift */,
-				0E5801FB20CF742200FD730B /* GameViewController.swift */,
-				0E5801FC20CF742200FD730B /* GameViewController.xib */,
 				F2D4D69E20CEB08F006C77AB /* art.scnassets */,
 				F2D4D6A220CEB08F006C77AB /* Main.storyboard */,
-=======
-=======
->>>>>>> Stashed changes
-				F2D4D6A220CEB08F006C77AB /* Main.storyboard */,
-				F2D4D6A520CEB090006C77AB /* Assets.xcassets */,
-				F2D4D69C20CEB08F006C77AB /* AppDelegate.swift */,
-				F2D4D69E20CEB08F006C77AB /* art.scnassets */,
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 				F2D4D6A720CEB090006C77AB /* LaunchScreen.storyboard */,
 				F2D4D6AA20CEB090006C77AB /* Info.plist */,
-				0E5801FF20CFAEFB00FD730B /* Monster.swift */,
-				0E58020120CFAF5800FD730B /* common.swift */,
 			);
 			path = Shooter;
 			sourceTree = "<group>";
@@ -297,19 +260,7 @@
 				F2D4D6A920CEB090006C77AB /* LaunchScreen.storyboard in Resources */,
 				F2D4D6A620CEB090006C77AB /* Assets.xcassets in Resources */,
 				F2D4D6A420CEB08F006C77AB /* Main.storyboard in Resources */,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 				F2EF7D6720CFAF8D00BD9B86 /* HelpView.xib in Resources */,
-=======
-				0E5801FE20CF742200FD730B /* GameViewController.xib in Resources */,
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
-=======
-				F2EF7D6720CFAF8D00BD9B86 /* HelpView.xib in Resources */,
->>>>>>> Stashed changes
-=======
-				F2EF7D6720CFAF8D00BD9B86 /* HelpView.xib in Resources */,
->>>>>>> Stashed changes
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,9 +285,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 				F2EF7D6F20CFE1FC00BD9B86 /* common.swift in Sources */,
 				F2D4D6A120CEB08F006C77AB /* GameViewController.swift in Sources */,
 				F2D4D69D20CEB08F006C77AB /* AppDelegate.swift in Sources */,
@@ -345,26 +293,6 @@
 				F2EF7D5F20CFA67800BD9B86 /* HomeViewController.swift in Sources */,
 				F2EF7D6920CFC40D00BD9B86 /* ModeViewController.swift in Sources */,
 				F2EF7D6D20CFE1E700BD9B86 /* Monster.swift in Sources */,
-=======
-				0E58020020CFAEFB00FD730B /* Monster.swift in Sources */,
-				F2D4D6A120CEB08F006C77AB /* ViewController.swift in Sources */,
-				0E5801FD20CF742200FD730B /* GameViewController.swift in Sources */,
-				F2D4D69D20CEB08F006C77AB /* AppDelegate.swift in Sources */,
-				0E58020220CFAF5800FD730B /* common.swift in Sources */,
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
-=======
-=======
->>>>>>> Stashed changes
-				F2D4D6A120CEB08F006C77AB /* GameViewController.swift in Sources */,
-				F2D4D69D20CEB08F006C77AB /* AppDelegate.swift in Sources */,
-				F2EF7D6B20CFCFDF00BD9B86 /* Mode.swift in Sources */,
-				F2EF7D6520CFAF7F00BD9B86 /* HelpView.swift in Sources */,
-				F2EF7D5F20CFA67800BD9B86 /* HomeViewController.swift in Sources */,
-				F2EF7D6920CFC40D00BD9B86 /* ModeViewController.swift in Sources */,
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -538,7 +466,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2MKL83JKMD;
+				DEVELOPMENT_TEAM = 9488FP2TV3;
 				INFOPLIST_FILE = Shooter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = h.Shooter;
@@ -555,7 +483,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2MKL83JKMD;
+				DEVELOPMENT_TEAM = 9488FP2TV3;
 				INFOPLIST_FILE = Shooter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = h.Shooter;

@@ -133,7 +133,6 @@ class GameInfo : NSObject, NSCoding {
     }
     
     init(timeRemain: Int = 60,
-<<<<<<< HEAD
          initMonsterCount: Int = 10,
          hitCount: Int = 0,
          monsters: [Monster] = [Monster](),
@@ -142,16 +141,6 @@ class GameInfo : NSObject, NSCoding {
          timeLimiting: Bool = true,
          animating: Bool = true,
          infinityMode: Bool = false) {
-=======
-        initMonsterCount: Int = 10,
-        hitCount: Int = 0,
-        monsters: [Monster] = [Monster](),
-        bgMusicOn: Bool = false,
-        soundEffectOn: Bool = false,
-        timeLimiting: Bool = true,
-        animating: Bool = true,
-        infinityMode: Bool = false) {
->>>>>>> cf39e310478fb75abff7feb5458794291ad8ab11
         
         self.timeRemain = timeRemain;
         self.initMonsterCount = initMonsterCount;
