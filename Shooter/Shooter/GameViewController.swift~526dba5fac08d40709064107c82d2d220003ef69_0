@@ -1,0 +1,195 @@
+//
+//  GameViewController.swift
+//  Shooter
+//
+//  Created by kotta on 12/06/2018.
+//  Copyright © 2018 Starblo Hong. All rights reserved.
+//
+import Foundation
+import CoreFoundation
+
+import UIKit
+import ARKit
+
+class GameViewController: UIViewController {
+
+    var mode: String = "mode1";
+    var isTimerRunning =  false;
+    var timer = Timer();
+    var timeRemain = 60;
+    var initMonsterCount = 10;
+    var hitCount = 0;
+    var monsters = [Monster]();
+    var bgMusicOn = false;
+    var soundEffectOn = false;
+    var timeLimiting = true;
+    var animating = true;
+    var paused = false;
+    
+    @IBOutlet weak var pauseView: UIView!
+    @IBOutlet weak var timerButton: UIButton!
+    @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var continueButton: UIButton!
+
+    @IBOutlet weak var quitButton: UIButton!
+    @IBOutlet weak var optionButton: UIButton!
+    
+    @IBOutlet weak var musicButton: UIButton!
+    
+    @IBOutlet weak var scoreButton: UIButton!
+    @IBOutlet weak var musicController: UIView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        
+        pauseView.isHidden = true;
+        musicController.isHidden = true;
+        
+        initMonster();
+        loadModel(animated: animating);
+        addTapGestureToSceneView();
+        
+        if timeLimiting {
+            runTimer();
+        }
+    }
+
+    func initMonster() {
+        for _ in 1...initMonsterCount {
+            monsters.append(Monster());
+        }
+    }
+    
+    
+    @IBAction func toggleMusicController(_ sender: Any) {
+        musicController.isHidden = !musicController.isHidden;
+    }
+    
+    @IBAction func toggleBgMusic(_ sender: Any) {
+        musicController.isHidden = true;
+        //TODO: turn on/off background music
+    }
+    
+    
+    @IBAction func toggleSoundEffect(_ sender: Any) {
+        musicController.isHidden = true;
+        //TODO: turn on/off sound effect
+    }
+    
+    @IBAction func onTimerClick(_ sender: Any) {
+        pauseView.isHidden = false;
+        timer.invalidate();
+        paused = true;
+    }
+    
+    @IBAction func onContinueButtonClick(_ sender: Any) {
+        pauseView.isHidden = true;
+        paused = false;
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
+    }
+    
+    func loadModel(animated: Bool = true) {
+        for m in monsters {
+            let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0);
+            
+            let boxNode = SCNNode();
+            boxNode.geometry = box;
+            boxNode.position = SCNVector3(m.initPostion.x, m.initPostion.y, m.initPostion.z);
+            
+            if(animated) {
+                let rotationAnimation = CABasicAnimation(keyPath:"rotation");
+                rotationAnimation.toValue = NSValue(scnVector4:SCNVector4Make(0, 1, 0, Float( Double.pi * 2)));
+                rotationAnimation.duration = 4.0;
+                rotationAnimation.repeatCount = .infinity;
+                
+                let animation = CABasicAnimation(keyPath: "position");
+                animation.toValue = NSValue(scnVector3: SCNVector3Make(m.animationPostion.x, m.animationPostion.y, m.animationPostion.z));
+                animation.duration = 5.0;
+                animation.autoreverses = true;
+                animation.repeatCount = .infinity
+                
+                boxNode.addAnimation(animation, forKey: nil);
+                boxNode.addAnimation(rotationAnimation, forKey:nil);
+            }
+            
+            sceneView.scene.rootNode.addChildNode(boxNode);
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        
+        let config = ARWorldTrackingConfiguration();
+        sceneView.session.run(config);
+        
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        sceneView.session.pause();
+    }
+    
+    func addTapGestureToSceneView() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(GameViewController.didTap(withGestureRecognizer:)))
+        sceneView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @IBAction func onQuitButtonClick(_ sender: Any) {
+        saveRecord();
+        
+        //TODO: navigate to next view
+    }
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
+    }
+    
+    @objc func updateTime() {
+        if(timeRemain == 0) {
+            //TODO: quit game;
+            return;
+        }
+        timeRemain = timeRemain - 1;
+        timerButton.setTitle(String(timeRemain), for: UIControlState.normal);
+    }
+    
+    func saveRecord() {
+        //TODO: write into local file
+    }
+    
+    @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
+        
+        musicController.isHidden = true;
+        let tapLocation = recognizer.location(in: sceneView)
+        let hitTestResults = sceneView.hitTest(tapLocation)
+        guard let node = hitTestResults.first?.node else {
+            return
+        }
+        if paused {
+            return;
+        }
+        
+        node.removeFromParentNode();
+        incrementHitCount();
+        playSoundEffect();
+    }
+    
+    func playSoundEffect() {
+        //TODO:
+    }
+    
+    func playBgMusic() {
+        //TODO:
+    }
+    
+    func incrementHitCount() {
+        hitCount = hitCount + 1;
+        scoreButton.setTitle(String(hitCount), for: UIControlState.normal);
+    }
+}
+
+extension float4x4 {
+    var translation: float3 {
+        let translation = self.columns.3;
+        return float3(translation.x, translation.y, translation.z);
+    }
+}
