@@ -9,7 +9,15 @@
 import UIKit
 
 class ResultViewController: UIViewController {
-
+    @IBOutlet weak var WinOrLoseLabel: UILabel!
+    @IBOutlet weak var SaySomethingLabel: UILabel!
+    @IBOutlet weak var ScoreLabel: UILabel!
+    
+    @IBOutlet weak var BackButton: UIButton!
+    
+    @IBAction func GoBackAction(_ sender: UIButton) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

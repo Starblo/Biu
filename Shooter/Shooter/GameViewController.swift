@@ -180,12 +180,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func onQuitButtonClick(_ sender: Any) {
         //TODO: navigate to next view
-<<<<<<< HEAD
         UserDefaults.standard.set(true, forKey: "LoadFromLocalFile")
-=======
-        //NOTE: forKey
-        UserDefaults.standard.set(true, forKey: "LOCAL_KEY");
->>>>>>> e5be8b694fc1f20511832584806ede8d01d9902b
         saveIntoLocalFile();
     }
     func runTimer() {
