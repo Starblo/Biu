@@ -25,7 +25,7 @@ class Monster: NSObject, NSCoding {
     var animationPostion: SCNVector3;
     var currentPostion: SCNVector3;
     var dead = false;
-    var id = "0";
+    var id = genId();
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(initPostion, forKey: PropertyKey.initPosition);
@@ -71,7 +71,7 @@ class Monster: NSObject, NSCoding {
         initPostion = SCNVector3Make(random(), random(), random())
         animationPostion = SCNVector3Make(random(), random(), random())
         currentPostion = SCNVector3Make(initPostion.x, initPostion.y, initPostion.z);
-        id = "0";
+        id = genId();
         dead = false;
     }
 }
