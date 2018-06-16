@@ -28,7 +28,8 @@ class HomeViewController: UIViewController {
     }
     
     private func setup() {
-        
+        self.mode1Button.layer.cornerRadius = self.mode1Button.bounds.height/2
+        self.mode2Button.layer.cornerRadius = self.mode2Button.bounds.height/2
     }
 
     

@@ -11,11 +11,11 @@ import CoreFoundation
 import UIKit
 import ARKit
 
-func random(lower: Double = -1, upper: Double = 1) -> Double {
-    let num = drand48();
-    return lower + (upper - lower) * num;
-}
 func random(lower: Float = -1, upper: Float = 1) -> Float {
     let num = Float(drand48());
     return lower + (upper - lower) * num;
+}
+
+func genId() -> String {
+    return String(random(lower: 0, upper: 10000));
 }

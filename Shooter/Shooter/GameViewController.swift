@@ -15,9 +15,11 @@ import ARKit
 class GameViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    var mode : Mode = Mode.mode1
     
-    //TODO: var mode
+    var mode : Mode = Mode.mode1
+    //IsWin: to pass it to the ResultViewController, implies whether if win or lose
+    var IsWin : Bool = false
+    
     var isTimerRunning =  false;
     var timer = Timer();
     
@@ -25,27 +27,21 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     var gameInfo = GameInfo();
     var loadFromLocalFile = true;
     
-//    var timeRemain = 60;
-//    var initMonsterCount = 10;
-//    var hitCount = 0;
-//    var monsters = [Monster]();
-//    var bgMusicOn = false;
-//    var soundEffectOn = false;
-//    var timeLimiting = true;
-//    var animating = true;
-//    var paused = false;
-    
     @IBOutlet weak var pauseView: UIView!
     @IBOutlet weak var timerButton: UIButton!
 
     @IBOutlet weak var continueButton: UIButton!
     
     @IBOutlet weak var quitButton: UIButton!
-    @IBOutlet weak var optionButton: UIButton!
+    @IBOutlet weak var nextLevelButton: UIButton!
+    @IBOutlet weak var CancelButton: UIButton!
+    
+    @IBOutlet weak var nextLevelView: UIView!
     
     @IBOutlet weak var musicButton: UIButton!
     
-    @IBOutlet weak var scoreButton: UIButton!
+    @IBOutlet weak var monsterRemainCountLabel: UILabel!
+    
     @IBOutlet weak var musicController: UIView!
     
     override func viewDidLoad() {
@@ -53,6 +49,19 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         
         pauseView.isHidden = true;
         musicController.isHidden = true;
+        nextLevelView.isHidden = true;
+        self.quitButton.layer.cornerRadius = self.quitButton.bounds.height/2
+        self.continueButton.layer.cornerRadius = self.continueButton.bounds.height/2
+        self.nextLevelButton.layer.cornerRadius = self.nextLevelButton.bounds.height/2
+        self.CancelButton.layer.cornerRadius = self.CancelButton.bounds.height/2
+        
+        if mode == Mode.mode1 {
+            self.loadFromLocalFile = UserDefaults.standard.bool(forKey: "LoadFromLocalFile_Mode1")
+            UserDefaults.standard.set(false, forKey: "LoadFromLocalFile_Mode1")
+        } else {self.quitButton.layer.cornerRadius = self.quitButton.bounds.height/2
+            self.loadFromLocalFile = UserDefaults.standard.bool(forKey: "LoadFromLocalFile_Mode2")
+            UserDefaults.standard.set(false, forKey: "LoadFromLocalFile_Mode2")
+        }
         
         //NOTE: loadFromLocalFile =》 archive
         
@@ -61,28 +70,62 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         //default number of monster is 10
         //default time limit is 60s
         
-        if(loadFromLocalFile) {
+        if(self.loadFromLocalFile) {
             loadFromFile();
         } else {
+            if(mode == Mode.mode2) {
+                initLevel(level: 0);
+            } else {
+                gameInfo.totalMonsterCount = 10;
+                gameInfo.timeRemain = 60;
+            }
             initMonster();
         }
-        
         loadModel(animated: gameInfo.animating);
+        
+        if self.mode == Mode.mode1 {
+            self.monsterRemainCountLabel.text = "0"
+        } else {
+            self.monsterRemainCountLabel.text = String(gameInfo.totalMonsterCount - gameInfo.hitCount)
+        }
         
         addTapGestureToSceneView();
         if gameInfo.timeLimiting {
-            runTimer();
+            if self.mode == Mode.mode2 && self.gameInfo.IsLevelOnePassed == true {
+                pauseView.isHidden = false
+            } else {
+                runTimer();
+            }
         } else {
             timerButton.isHidden = true;
         }
     }
+
+    func initLevel(level: Int) {
+        self.gameInfo.timeRemainForLevelOne = self.gameInfo.timeRemain;
+        self.gameInfo.animating = GameLevel.levels[level].animating;
+        self.gameInfo.timeRemain = GameLevel.levels[level].timeLimit;
+        self.gameInfo.totalMonsterCount += GameLevel.levels[level].monsterNum;
+        print("GAMEINFO:", self.gameInfo.totalMonsterCount);
+    }
     
     func loadFromFile() {
         if let info = NSKeyedUnarchiver.unarchiveObject(withFile: GameInfo.ArchiveURL.path) as? GameInfo {
-            gameInfo = info;
-            scoreButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
-            timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
+            
+            self.gameInfo = info;
+            if(self.mode == Mode.mode2) {
+                self.monsterRemainCountLabel.text = String(self.gameInfo.totalMonsterCount - self.gameInfo.hitCount)
+            } else {
+                self.monsterRemainCountLabel.text = String(self.gameInfo.hitCount)
+            }
+            self.timerButton.setTitle(String(self.gameInfo.timeRemain), for: UIControlState.normal);
         } else {
+            if(self.mode == Mode.mode2) {
+                initLevel(level: 0);
+            } else {
+                self.gameInfo.totalMonsterCount = 10;
+                self.gameInfo.timeRemain = 60;
+            }
             initMonster();
         }
     }
@@ -97,41 +140,68 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func initMonster() {
-        for _ in 1...(gameInfo.initMonsterCount - gameInfo.hitCount) {
-            gameInfo.monsters.append(Monster());
+        for _ in 1...self.gameInfo.totalMonsterCount {
+            self.gameInfo.monsters.append(Monster());
+        }
+    }
+
+    
+    @IBAction func onNextLevelButtonClick(_ sender: UIButton) {
+        nextLevelView.isHidden = true;
+        self.gameInfo.currentLevel = self.gameInfo.currentLevel + 1;
+        initLevel(level: self.gameInfo.currentLevel - 1);
+        randomAddNode(self.gameInfo.totalMonsterCount - self.gameInfo.monsters.count);
+        
+        self.monsterRemainCountLabel.text = String(self.gameInfo.totalMonsterCount - self.gameInfo.hitCount)
+        self.timerButton.setTitle(String(self.gameInfo.timeRemain), for: UIControlState.normal);
+        
+        runTimer();
+    }
+    
+    @IBAction func toggleMusicController(_ sender: UIButton) {
+        self.musicController.isHidden = !self.musicController.isHidden;
+        if self.musicController.isHidden == false {
+            timer.invalidate()
+        } else {
+            runTimer()
         }
     }
     
-    
-    @IBAction func toggleMusicController(_ sender: Any) {
-        musicController.isHidden = !musicController.isHidden;
+    @IBAction func toggleBgMusic(_ sender: UIButton) {
+        MusicManager.sharedInstance.changeBackMusicState(sender)
+        self.musicController.isHidden = true;
+        runTimer()
     }
     
-    @IBAction func toggleBgMusic(_ sender: Any) {
-        musicController.isHidden = true;
-        //TODO: turn on/off background music
+    @IBAction func toggleSoundEffect(_ sender: UIButton) {
+        MusicManager.sharedInstance.changeMusicState(sender)
+        self.musicController.isHidden = true;
+        runTimer()
     }
     
-    
-    @IBAction func toggleSoundEffect(_ sender: Any) {
-        musicController.isHidden = true;
-        //TODO: turn on/off sound effect
-    }
     
     @IBAction func onTimerClick(_ sender: Any) {
-        pauseView.isHidden = false;
-        timer.invalidate();
-        paused = true;
+        self.pauseView.isHidden = false;
+        self.timer.invalidate();
+        self.paused = true;
     }
     
     @IBAction func onContinueButtonClick(_ sender: Any) {
-        pauseView.isHidden = true;
-        paused = false;
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
+        self.pauseView.isHidden = true;
+        self.paused = false;
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
+    }
+    @IBAction func onNextLevelViewQuitButtonClick(_ sender: UIButton) {
+        if self.mode == Mode.mode1 {
+            UserDefaults.standard.set(true, forKey: "LoadFromLocalFile_Mode1")
+        } else {
+                UserDefaults.standard.set(true, forKey: "LoadFromLocalFile_Mode2")
+        }
+        saveIntoLocalFile();
     }
     
     func loadModel(animated: Bool = true) {
-        for m in gameInfo.monsters {
+        for m in self.gameInfo.monsters {
             if m.dead {
                 continue;
             }
@@ -169,16 +239,21 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        MusicManager.sharedInstance.Loading()
+        
         super.viewWillAppear(animated);
         
         let config = ARWorldTrackingConfiguration();
         sceneView.session.run(config);
         
+        MusicManager.sharedInstance.playBackgroundMusic();
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         sceneView.session.pause();
+        
+        MusicManager.sharedInstance.stopBackgroundMusic();
     }
     
     func addTapGestureToSceneView() {
@@ -187,63 +262,98 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func onQuitButtonClick(_ sender: Any) {
-        //TODO: navigate to next view
+        if self.mode == Mode.mode1 {
+            UserDefaults.standard.set(true, forKey: "LoadFromLocalFile_Mode1")
+        } else {
+            UserDefaults.standard.set(true, forKey: "LoadFromLocalFile_Mode2")
+        }
         saveIntoLocalFile();
     }
+    
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(GameViewController.updateTime)), userInfo: nil, repeats: true);
     }
     
     @objc func updateTime() {
-        if(gameInfo.timeRemain == 0 && gameInfo.timeLimiting) {
-            //TODO: quit game;
+        if(self.gameInfo.timeRemain == 0 && self.gameInfo.timeLimiting) {
+            if(self.mode == Mode.mode1) {
+                //infinity mode
+                //NOTE: forKey
+                UserDefaults.standard.set(self.gameInfo.hitCount * 5, forKey: "MODE_1_NEW_SCORE");
+            } else {
+                //NOTE: forKey
+                var score = 0
+                if self.gameInfo.currentLevel == self.gameInfo.maxLevel {
+                    score = GameLevel.levels[0].monsterNum + self.gameInfo.hitCount * 5 + self.gameInfo.timeRemainForLevelOne * 10
+                } else {
+                    score = self.gameInfo.hitCount
+                }
+                UserDefaults.standard.set(score, forKey: "MODE_2_NEW_SCORE");
+            }
+            self.timer.invalidate()
+            self.performSegue(withIdentifier: "ShowResultView", sender: self)
             return;
         }
-        gameInfo.timeRemain = gameInfo.timeRemain - 1;
-        timerButton.setTitle(String(gameInfo.timeRemain), for: UIControlState.normal);
+        self.gameInfo.timeRemain = self.gameInfo.timeRemain - 1;
+        self.timerButton.setTitle(String(self.gameInfo.timeRemain), for: UIControlState.normal);
     }
     
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
         
-        musicController.isHidden = true;
+        self.musicController.isHidden = true;
         let tapLocation = recognizer.location(in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation)
         guard let node = hitTestResults.first?.node else {
             return
         }
-        if paused {
+        if self.paused == true {
             return;
         }
         
         node.removeFromParentNode();
-        for i in 0...gameInfo.monsters.count {
-            if(gameInfo.monsters[i].id == node.name) {
-                gameInfo.monsters[i].dead = true;
+        for i in 0...(self.gameInfo.monsters.count-1) {
+            if(self.gameInfo.monsters[i].id == node.name) {
+                self.gameInfo.monsters[i].dead = true;
             }
         }
         
         incrementHitCount();
         playSoundEffect();
         
-        if(!gameInfo.timeLimiting) {
+        if(self.mode == Mode.mode1) {
             //case infinity mode
             randomAddNode();
+            self.gameInfo.totalMonsterCount += 1;
         }
         
-        if(gameInfo.timeLimiting && gameInfo.hitCount == gameInfo.initMonsterCount) {
-            //TODO: done
+        //for mode2
+        if(self.gameInfo.timeLimiting && self.gameInfo.hitCount == self.gameInfo.totalMonsterCount) {
+            var score = 0
+            if(self.gameInfo.currentLevel == self.gameInfo.maxLevel) {
+                self.IsWin = true
+                self.timer.invalidate()
+                score = GameLevel.levels[0].monsterNum + self.gameInfo.hitCount * 5 + self.gameInfo.timeRemainForLevelOne * 10 + self.gameInfo.timeRemain * 50
+                self.performSegue(withIdentifier: "ShowResultView", sender: self)
+            } else {
+                self.timer.invalidate()
+                score = self.gameInfo.hitCount + self.gameInfo.timeRemain * 10
+                self.nextLevelView.isHidden = false
+            }
+            UserDefaults.standard.set(score, forKey: "MODE_2_NEW_SCORE")
         }
     }
     
-    func randomAddNode() {
-        let m = Monster();
-        m.id = String(gameInfo.monsters.count);
-        addModel(m, gameInfo.animating);
-        gameInfo.initMonsterCount = gameInfo.initMonsterCount + 1;
+    func randomAddNode(_ num: Int = 1) {
+        for _ in 1...num {
+            let m = Monster();
+            self.gameInfo.monsters.append(m);
+            addModel(m, self.gameInfo.animating);
+        }
     }
     
     func playSoundEffect() {
         //TODO:
+        MusicManager.sharedInstance.Biu()
     }
     
     func playBgMusic() {
@@ -251,8 +361,12 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func incrementHitCount() {
-        gameInfo.hitCount = gameInfo.hitCount + 1;
-        scoreButton.setTitle(String(gameInfo.hitCount), for: UIControlState.normal);
+        self.gameInfo.hitCount = self.gameInfo.hitCount + 1;
+        if self.mode == Mode.mode2 {
+            self.monsterRemainCountLabel.text = String(self.gameInfo.totalMonsterCount - self.gameInfo.hitCount)
+        } else {
+            self.monsterRemainCountLabel.text = String(self.gameInfo.hitCount)
+        }
     }
     
     
@@ -281,6 +395,21 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        if segue.identifier == "ShowResultView" {
+            guard let resultViewControleer = segue.destination as? ResultViewController else {return}
+            resultViewControleer.mode = self.mode
+            resultViewControleer.IsWin = self.IsWin
+        }
+    }
+    
 }
 
 extension float4x4 {
